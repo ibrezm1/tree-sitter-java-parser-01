@@ -1,0 +1,9 @@
+tree-sitter
+networkx
+chromadb
+google-generativeai
+matplotlib
+javalang
+pyvis
+tree-sitter-python
+tree-sitter-java

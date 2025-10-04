@@ -1,0 +1,10 @@
+ejb-client/.gradle/
+ejb-client/.idea/
+ejb-client/ejb-client.iml
+ejb-client/build/
+
+ejb/.gradle/
+ejb/.idea/
+ejb/ejb.iml
+ejb/build/
+

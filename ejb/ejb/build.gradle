@@ -1,0 +1,58 @@
+apply plugin: 'java'    
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.8
+version = '1.0'
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/java']
+        }
+        resources {
+            srcDirs = ['src/resources']
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'javax.ejb', name: 'javax.ejb-api', version: '3.2'
+    compile group: 'javax.enterprise', name: 'cdi-api', version: '2.0-EDR2'
+    compile group: 'javax.jms', name: 'jms-api', version: '1.1-rev-1'
+    compile group: 'org.eclipse.persistence', name: 'javax.persistence', version: '2.1.1'
+    compile group: 'javax.transaction', name: 'jta', version: '1.1'
+    compile group: 'org.jboss.weld', name: 'weld-api', version: '2.4.Final'
+    compile group: 'org.jboss.weld', name: 'weld-core-impl', version: '2.4.0.Final'
+
+}
+
+idea {
+    project {
+        jdkName '1.8'
+        languageLevel '1.8'
+        vcs 'Git'
+    }
+    module {
+        excludeDirs += file('buildSrc')
+        excludeDirs += file('build')
+        excludeDirs += file('gradle')
+        excludeDirs += file('.gradle')
+        excludeDirs += file('.idea')
+        excludeDirs += file('.classpath')
+        excludeDirs += file('.project')
+        excludeDirs += file('gradlew')
+        excludeDirs += file('gradlew.bat')
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.1'
+}
+
