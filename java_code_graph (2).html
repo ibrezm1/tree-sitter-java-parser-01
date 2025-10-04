@@ -1,0 +1,164 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#68a7f7", "id": "TaskMessage", "label": "TaskMessage", "shape": "dot", "title": "\u003cb\u003eTaskMessage\u003c/b\u003e\u003cbr\u003eType: class\u003cbr\u003e\u003cpre\u003e@MessageDriven(activationConfig = {\n        @ActivationConfigProperty(\n            propertyName = \"destination\",\n            propertyValue = \"ejbQueue\"\n        ),\n        @ActivationConfigProperty(\n            propertyName = \"destinationType\",\n            propertyValue = \"javax.jms.Queue\"\n        ),\u003c/pre\u003e"}, {"color": "#68a7f7", "id": "CustomerListener", "label": "CustomerListener", "shape": "dot", "title": "\u003cb\u003eCustomerListener\u003c/b\u003e\u003cbr\u003eType: class\u003cbr\u003e\u003cpre\u003epublic class CustomerListener {\n\n    @PostPersist\n    public void onPostPersist(Object o) {\n        System.out.println(\"##### CustomerListener - object persisted: \" + o);\n    }\n\n    @PostUpdate\n    public void onPostUpdate(Object o) {\n        System.out.println(\"##### CustomerListener - object updat\u003c/pre\u003e"}, {"color": "#68a7f7", "id": "Customer", "label": "Customer", "shape": "dot", "title": "\u003cb\u003eCustomer\u003c/b\u003e\u003cbr\u003eType: class\u003cbr\u003e\u003cpre\u003e@Entity\n@EntityListeners(CustomerListener.class)\n@Table(name = \"CUSTOMER\", schema = \"ejb\")\npublic class Customer implements Serializable {\n\n    private Long id;\n    \n    private String firstName;\n    private String LastName;\n    \n    @Id\n    @GeneratedValue(strategy = GenerationType.SEQUENCE)\n    @C\u003c/pre\u003e"}, {"color": "#68a7f7", "id": "TaskInterceptor", "label": "TaskInterceptor", "shape": "dot", "title": "\u003cb\u003eTaskInterceptor\u003c/b\u003e\u003cbr\u003eType: class\u003cbr\u003e\u003cpre\u003epublic class TaskInterceptor {\n    \n    @Resource(name=\"jms/__defaultConnectionFactory\")\n    private ConnectionFactory connectionFactory;\n    \n    @Resource(mappedName = \"jms/ejbqueue\")\n    private Queue queue;\n    \n    public TaskInterceptor() {\n    }\n    \n    @AroundInvoke\n    public Object create\u003c/pre\u003e"}, {"color": "#68a7f7", "id": "CustomerService", "label": "CustomerService", "shape": "dot", "title": "\u003cb\u003eCustomerService\u003c/b\u003e\u003cbr\u003eType: class\u003cbr\u003e\u003cpre\u003e@Remote\n@Stateless\npublic class CustomerService {\n    \n    @PersistenceContext\n    private EntityManager em;\n    \n    @Interceptors({TaskInterceptor.class})\n    public Customer createCustomer(String firstName, String lastName) {\n        Customer customer = new Customer();\n        customer.setFirstNa\u003c/pre\u003e"}, {"color": "#7ddf7d", "id": "TaskMessage.onMessage", "label": "TaskMessage.onMessage", "shape": "dot", "title": "\u003cb\u003eTaskMessage.onMessage\u003c/b\u003e\u003cbr\u003eType: method\u003cbr\u003e\u003cpre\u003e@Override\n    public void onMessage(Message message) {\n        try {\n            if (message instanceof ObjectMessage) {\n                String operation = message.getStringProperty(\"operation\");\n                Object object = ((ObjectMessage)message).getObject();\n                Customer customer \u003c/pre\u003e"}, {"color": "#7ddf7d", "id": "CustomerListener.onPostPersist", "label": "CustomerListener.onPostPersist", "shape": "dot", "title": "\u003cb\u003eCustomerListener.onPostPersist\u003c/b\u003e\u003cbr\u003eType: method\u003cbr\u003e\u003cpre\u003e@PostPersist\n    public void onPostPersist(Object o) {\n        System.out.println(\"##### CustomerListener - object persisted: \" + o);\n    }\u003c/pre\u003e"}, {"color": "#7ddf7d", "id": "CustomerListener.onPostUpdate", "label": "CustomerListener.onPostUpdate", "shape": "dot", "title": "\u003cb\u003eCustomerListener.onPostUpdate\u003c/b\u003e\u003cbr\u003eType: method\u003cbr\u003e\u003cpre\u003e@PostUpdate\n    public void onPostUpdate(Object o) {\n        System.out.println(\"##### CustomerListener - object updated: \" + o);\n    }\u003c/pre\u003e"}, {"color": "#7ddf7d", "id": "Customer.getId", "label": "Customer.getId", "shape": "dot", "title": "\u003cb\u003eCustomer.getId\u003c/b\u003e\u003cbr\u003eType: method\u003cbr\u003e\u003cpre\u003e@Id\n    @GeneratedValue(strategy = GenerationType.SEQUENCE)\n    @Column(name = \"ID\")\n    public Long getId() {\n        return id;\n    }\u003c/pre\u003e"}, {"color": "#7ddf7d", "id": "Customer.getFirstName", "label": "Customer.getFirstName", "shape": "dot", "title": "\u003cb\u003eCustomer.getFirstName\u003c/b\u003e\u003cbr\u003eType: method\u003cbr\u003e\u003cpre\u003e@Basic\n    @Column(name = \"FIRSTNAME\")\n    public String getFirstName() {\n        return firstName;\n    }\u003c/pre\u003e"}, {"color": "#7ddf7d", "id": "Customer.getLastName", "label": "Customer.getLastName", "shape": "dot", "title": "\u003cb\u003eCustomer.getLastName\u003c/b\u003e\u003cbr\u003eType: method\u003cbr\u003e\u003cpre\u003e@Basic\n    @Column(name = \"LASTNAME\")\n    public String getLastName() {\n        return LastName;\n    }\u003c/pre\u003e"}, {"color": "#7ddf7d", "id": "Customer.setId", "label": "Customer.setId", "shape": "dot", "title": "\u003cb\u003eCustomer.setId\u003c/b\u003e\u003cbr\u003eType: method\u003cbr\u003e\u003cpre\u003epublic void setId(Long id) {\n        this.id = id;\n    }\u003c/pre\u003e"}, {"color": "#7ddf7d", "id": "Customer.setFirstName", "label": "Customer.setFirstName", "shape": "dot", "title": "\u003cb\u003eCustomer.setFirstName\u003c/b\u003e\u003cbr\u003eType: method\u003cbr\u003e\u003cpre\u003epublic void setFirstName(String firstName) {\n        this.firstName = firstName;\n    }\u003c/pre\u003e"}, {"color": "#7ddf7d", "id": "Customer.setLastName", "label": "Customer.setLastName", "shape": "dot", "title": "\u003cb\u003eCustomer.setLastName\u003c/b\u003e\u003cbr\u003eType: method\u003cbr\u003e\u003cpre\u003epublic void setLastName(String LastName) {\n        this.LastName = LastName;\n    }\u003c/pre\u003e"}, {"color": "#7ddf7d", "id": "Customer.hashCode", "label": "Customer.hashCode", "shape": "dot", "title": "\u003cb\u003eCustomer.hashCode\u003c/b\u003e\u003cbr\u003eType: method\u003cbr\u003e\u003cpre\u003e@Override\n    public int hashCode() {\n        int hash = 0;\n        hash += (id != null ? id.hashCode() : 0);\n        return hash;\n    }\u003c/pre\u003e"}, {"color": "#7ddf7d", "id": "Customer.equals", "label": "Customer.equals", "shape": "dot", "title": "\u003cb\u003eCustomer.equals\u003c/b\u003e\u003cbr\u003eType: method\u003cbr\u003e\u003cpre\u003e@Override\n    public boolean equals(Object object) {\n        // TODO: Warning - this method won\u0027t work in the case the id fields are not set\n        if (!(object instanceof Customer)) {\n            return false;\n        }\n        Customer other = (Customer) object;\n        if ((this.id == null \u0026\u0026 ot\u003c/pre\u003e"}, {"color": "#7ddf7d", "id": "Customer.toString", "label": "Customer.toString", "shape": "dot", "title": "\u003cb\u003eCustomer.toString\u003c/b\u003e\u003cbr\u003eType: method\u003cbr\u003e\u003cpre\u003e@Override\n    public String toString() {\n        return \"com.jpa.Customer[ id=\" + id + \" ]\";\n    }\u003c/pre\u003e"}, {"color": "#7ddf7d", "id": "TaskInterceptor.TaskInterceptor", "label": "TaskInterceptor.TaskInterceptor", "shape": "dot", "title": "\u003cb\u003eTaskInterceptor.TaskInterceptor\u003c/b\u003e\u003cbr\u003eType: method\u003cbr\u003e\u003cpre\u003epublic TaskInterceptor() {\n    }\u003c/pre\u003e"}, {"color": "#7ddf7d", "id": "TaskInterceptor.createTaskMessage", "label": "TaskInterceptor.createTaskMessage", "shape": "dot", "title": "\u003cb\u003eTaskInterceptor.createTaskMessage\u003c/b\u003e\u003cbr\u003eType: method\u003cbr\u003e\u003cpre\u003e@AroundInvoke\n    public Object createTaskMessage(InvocationContext ic) {\n        Object returnValue = null;\n        try {\n            Method method = ic.getMethod();\n            returnValue = ic.proceed();\n            Customer customer = ((Customer)returnValue);\n            Connection connection = \u003c/pre\u003e"}, {"color": "#7ddf7d", "id": "CustomerService.createCustomer", "label": "CustomerService.createCustomer", "shape": "dot", "title": "\u003cb\u003eCustomerService.createCustomer\u003c/b\u003e\u003cbr\u003eType: method\u003cbr\u003e\u003cpre\u003e@Interceptors({TaskInterceptor.class})\n    public Customer createCustomer(String firstName, String lastName) {\n        Customer customer = new Customer();\n        customer.setFirstName(firstName);\n        customer.setLastName(lastName);\n\n        em.persist(customer);\n\n        System.err.println(\"###\u003c/pre\u003e"}, {"color": "#f27b7b", "id": "unresolved::getStringProperty", "label": "unresolved::getStringProperty", "shape": "dot", "title": "\u003cb\u003eunresolved::getStringProperty\u003c/b\u003e\u003cbr\u003eType: unresolved\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#cccccc", "id": "onMessage", "label": "onMessage", "shape": "dot", "title": "\u003cb\u003eonMessage\u003c/b\u003e\u003cbr\u003eType: unknown\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#f27b7b", "id": "unresolved::getObject", "label": "unresolved::getObject", "shape": "dot", "title": "\u003cb\u003eunresolved::getObject\u003c/b\u003e\u003cbr\u003eType: unresolved\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#f27b7b", "id": "unresolved::println", "label": "unresolved::println", "shape": "dot", "title": "\u003cb\u003eunresolved::println\u003c/b\u003e\u003cbr\u003eType: unresolved\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#f27b7b", "id": "unresolved::printStackTrace", "label": "unresolved::printStackTrace", "shape": "dot", "title": "\u003cb\u003eunresolved::printStackTrace\u003c/b\u003e\u003cbr\u003eType: unresolved\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#cccccc", "id": "onPostPersist", "label": "onPostPersist", "shape": "dot", "title": "\u003cb\u003eonPostPersist\u003c/b\u003e\u003cbr\u003eType: unknown\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#cccccc", "id": "onPostUpdate", "label": "onPostUpdate", "shape": "dot", "title": "\u003cb\u003eonPostUpdate\u003c/b\u003e\u003cbr\u003eType: unknown\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#f27b7b", "id": "unresolved::getMethod", "label": "unresolved::getMethod", "shape": "dot", "title": "\u003cb\u003eunresolved::getMethod\u003c/b\u003e\u003cbr\u003eType: unresolved\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#cccccc", "id": "createTaskMessage", "label": "createTaskMessage", "shape": "dot", "title": "\u003cb\u003ecreateTaskMessage\u003c/b\u003e\u003cbr\u003eType: unknown\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#f27b7b", "id": "unresolved::proceed", "label": "unresolved::proceed", "shape": "dot", "title": "\u003cb\u003eunresolved::proceed\u003c/b\u003e\u003cbr\u003eType: unresolved\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#f27b7b", "id": "unresolved::createConnection", "label": "unresolved::createConnection", "shape": "dot", "title": "\u003cb\u003eunresolved::createConnection\u003c/b\u003e\u003cbr\u003eType: unresolved\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#f27b7b", "id": "unresolved::createSession", "label": "unresolved::createSession", "shape": "dot", "title": "\u003cb\u003eunresolved::createSession\u003c/b\u003e\u003cbr\u003eType: unresolved\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#f27b7b", "id": "unresolved::createProducer", "label": "unresolved::createProducer", "shape": "dot", "title": "\u003cb\u003eunresolved::createProducer\u003c/b\u003e\u003cbr\u003eType: unresolved\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#f27b7b", "id": "unresolved::createObjectMessage", "label": "unresolved::createObjectMessage", "shape": "dot", "title": "\u003cb\u003eunresolved::createObjectMessage\u003c/b\u003e\u003cbr\u003eType: unresolved\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#f27b7b", "id": "unresolved::setStringProperty", "label": "unresolved::setStringProperty", "shape": "dot", "title": "\u003cb\u003eunresolved::setStringProperty\u003c/b\u003e\u003cbr\u003eType: unresolved\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#f27b7b", "id": "unresolved::getName", "label": "unresolved::getName", "shape": "dot", "title": "\u003cb\u003eunresolved::getName\u003c/b\u003e\u003cbr\u003eType: unresolved\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#f27b7b", "id": "unresolved::setObject", "label": "unresolved::setObject", "shape": "dot", "title": "\u003cb\u003eunresolved::setObject\u003c/b\u003e\u003cbr\u003eType: unresolved\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#f27b7b", "id": "unresolved::send", "label": "unresolved::send", "shape": "dot", "title": "\u003cb\u003eunresolved::send\u003c/b\u003e\u003cbr\u003eType: unresolved\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#f27b7b", "id": "unresolved::persist", "label": "unresolved::persist", "shape": "dot", "title": "\u003cb\u003eunresolved::persist\u003c/b\u003e\u003cbr\u003eType: unresolved\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}, {"color": "#cccccc", "id": "createCustomer", "label": "createCustomer", "shape": "dot", "title": "\u003cb\u003ecreateCustomer\u003c/b\u003e\u003cbr\u003eType: unknown\u003cbr\u003e\u003cpre\u003e\u003c/pre\u003e"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "color": "#0074D9", "from": "TaskMessage", "title": "contains", "to": "TaskMessage.onMessage"}, {"arrows": "to", "color": "#0074D9", "from": "CustomerListener", "title": "contains", "to": "CustomerListener.onPostPersist"}, {"arrows": "to", "color": "#0074D9", "from": "CustomerListener", "title": "contains", "to": "CustomerListener.onPostUpdate"}, {"arrows": "to", "color": "#0074D9", "from": "Customer", "title": "contains", "to": "Customer.getId"}, {"arrows": "to", "color": "#0074D9", "from": "Customer", "title": "contains", "to": "Customer.getFirstName"}, {"arrows": "to", "color": "#0074D9", "from": "Customer", "title": "contains", "to": "Customer.getLastName"}, {"arrows": "to", "color": "#0074D9", "from": "Customer", "title": "contains", "to": "Customer.setId"}, {"arrows": "to", "color": "#0074D9", "from": "Customer", "title": "contains", "to": "Customer.setFirstName"}, {"arrows": "to", "color": "#0074D9", "from": "Customer", "title": "contains", "to": "Customer.setLastName"}, {"arrows": "to", "color": "#0074D9", "from": "Customer", "title": "contains", "to": "Customer.hashCode"}, {"arrows": "to", "color": "#0074D9", "from": "Customer", "title": "contains", "to": "Customer.equals"}, {"arrows": "to", "color": "#0074D9", "from": "Customer", "title": "contains", "to": "Customer.toString"}, {"arrows": "to", "color": "#0074D9", "from": "TaskInterceptor", "title": "contains", "to": "TaskInterceptor.TaskInterceptor"}, {"arrows": "to", "color": "#0074D9", "from": "TaskInterceptor", "title": "contains", "to": "TaskInterceptor.createTaskMessage"}, {"arrows": "to", "color": "#0074D9", "from": "CustomerService", "title": "contains", "to": "CustomerService.createCustomer"}, {"arrows": "to", "color": "#FF4136", "from": "TaskMessage.onMessage", "title": "calls", "to": "Customer.getFirstName"}, {"arrows": "to", "color": "#FF4136", "from": "TaskMessage.onMessage", "title": "calls", "to": "Customer.getLastName"}, {"arrows": "to", "color": "#FF4136", "from": "TaskMessage.onMessage", "title": "calls", "to": "Customer.getId"}, {"arrows": "to", "color": "#FF4136", "from": "Customer.hashCode", "title": "calls", "to": "Customer.hashCode"}, {"arrows": "to", "color": "#FF4136", "from": "Customer.equals", "title": "calls", "to": "Customer.equals"}, {"arrows": "to", "color": "#FF4136", "from": "CustomerService.createCustomer", "title": "calls", "to": "Customer.setFirstName"}, {"arrows": "to", "color": "#FF4136", "from": "CustomerService.createCustomer", "title": "calls", "to": "Customer.setLastName"}, {"arrows": "to", "color": "#FF4136", "from": "onMessage", "title": "calls", "to": "unresolved::getStringProperty"}, {"arrows": "to", "color": "#FF4136", "from": "onMessage", "title": "calls", "to": "unresolved::getObject"}, {"arrows": "to", "color": "#FF4136", "from": "onMessage", "title": "calls", "to": "unresolved::println"}, {"arrows": "to", "color": "#FF4136", "from": "onMessage", "title": "calls", "to": "unresolved::printStackTrace"}, {"arrows": "to", "color": "#FF4136", "from": "onPostPersist", "title": "calls", "to": "unresolved::println"}, {"arrows": "to", "color": "#FF4136", "from": "onPostUpdate", "title": "calls", "to": "unresolved::println"}, {"arrows": "to", "color": "#FF4136", "from": "createTaskMessage", "title": "calls", "to": "unresolved::getMethod"}, {"arrows": "to", "color": "#FF4136", "from": "createTaskMessage", "title": "calls", "to": "unresolved::proceed"}, {"arrows": "to", "color": "#FF4136", "from": "createTaskMessage", "title": "calls", "to": "unresolved::createConnection"}, {"arrows": "to", "color": "#FF4136", "from": "createTaskMessage", "title": "calls", "to": "unresolved::createSession"}, {"arrows": "to", "color": "#FF4136", "from": "createTaskMessage", "title": "calls", "to": "unresolved::createProducer"}, {"arrows": "to", "color": "#FF4136", "from": "createTaskMessage", "title": "calls", "to": "unresolved::createObjectMessage"}, {"arrows": "to", "color": "#FF4136", "from": "createTaskMessage", "title": "calls", "to": "unresolved::setStringProperty"}, {"arrows": "to", "color": "#FF4136", "from": "createTaskMessage", "title": "calls", "to": "unresolved::getName"}, {"arrows": "to", "color": "#FF4136", "from": "createTaskMessage", "title": "calls", "to": "unresolved::setObject"}, {"arrows": "to", "color": "#FF4136", "from": "createTaskMessage", "title": "calls", "to": "unresolved::send"}, {"arrows": "to", "color": "#FF4136", "from": "createTaskMessage", "title": "calls", "to": "unresolved::printStackTrace"}, {"arrows": "to", "color": "#FF4136", "from": "createCustomer", "title": "calls", "to": "unresolved::persist"}, {"arrows": "to", "color": "#FF4136", "from": "createCustomer", "title": "calls", "to": "unresolved::println"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
